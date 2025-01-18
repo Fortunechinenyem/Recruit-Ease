@@ -1,9 +1,23 @@
-import Image from "next/image";
+import Navbar from "@/app/components/Navbar";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      Recruit-Ease
+    <div>
+      <Navbar />
+      <div
+        className="relative bg-cover bg-center h-[400px]"
+        style={{ backgroundImage: "url(/images/pix2.jpg)" }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white">
+          <h1 className="text-4xl font-bold">Welcome to RecruitEase</h1>
+          <p className="mt-4">
+            Find your next career opportunity or hire top talent with ease.
+          </p>
+          <button className="mt-6 px-4 py-2 bg-blue-600 text-white rounded">
+            Get Started
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
