@@ -1,20 +1,34 @@
+import { useState } from "react";
+import { useRouter } from "next/router"; // Import useRouter
+import { login } from "../lib/auth";
 import Button from "@/app/components/Button";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
+    try {
+      const userCredential = await login(email, password);
+      const name = userCredential.user.displayName || "User";
+      alert(`Welcome, ${name}!`);
+      setError("");
+
+      router.push("/dashboard");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Email</label>
@@ -46,7 +60,7 @@ export default function Login() {
             href="/signup"
             className="text-blue-600 font-medium hover:underline"
           >
-            Sign up
+            Sign Up
           </Link>
         </p>
       </div>

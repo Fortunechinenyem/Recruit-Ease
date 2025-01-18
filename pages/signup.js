@@ -1,22 +1,34 @@
+import { useState } from "react";
+
 import Button from "@/app/components/Button";
 import Link from "next/link";
-import { useState } from "react";
+import { signup } from "@/lib/auth";
 
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Job Seeker");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ name, email, password, role });
+    try {
+      await signup(email, password, name);
+      setSuccess("Signup successful! You can now log in.");
+      setError("");
+    } catch (err) {
+      setError(err.message);
+      setSuccess("");
+    }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {success && <p className="text-green-500 mb-4">{success}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Name</label>
@@ -48,28 +60,17 @@ export default function Signup() {
               placeholder="Enter your password"
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Role</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="Job Seeker">Job Seeker</option>
-              <option value="Recruiter">Recruiter</option>
-            </select>
-          </div>
           <Button type="submit" className="w-full">
             Sign Up
           </Button>
         </form>
         <p className="text-sm text-gray-600 text-center mt-6">
-          Don't have an account?{" "}
+          Already have an account?{" "}
           <Link
-            href="/signup"
+            href="/login"
             className="text-blue-600 font-medium hover:underline"
           >
-            Sign up
+            Login
           </Link>
         </p>
       </div>
