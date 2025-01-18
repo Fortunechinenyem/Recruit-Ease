@@ -18,7 +18,7 @@ export default function Login() {
       alert(`Welcome, ${name}!`);
       setError("");
 
-      router.push("/dashboard");
+      router.push("/");
     } catch (err) {
       setError(err.message);
     }
