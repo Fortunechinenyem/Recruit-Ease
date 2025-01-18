@@ -1,3 +1,5 @@
+import Button from "@/app/components/Button";
+import Footer from "@/app/components/Footer";
 import Navbar from "@/app/components/Navbar";
 
 export default function Home() {
@@ -13,11 +15,12 @@ export default function Home() {
           <p className="mt-4">
             Find your next career opportunity or hire top talent with ease.
           </p>
-          <button className="mt-6 px-4 py-2 bg-blue-600 text-white rounded">
-            Get Started
-          </button>
+
+          <Button className="mt-6 px-4 py-2">Get Started</Button>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
