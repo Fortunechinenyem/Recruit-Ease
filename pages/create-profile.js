@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function CreateProfile() {
+  const [user, setUser] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -10,9 +13,20 @@ export default function CreateProfile() {
     experience: "",
     bio: "",
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
+
+  useState(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push("/login");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,22 +39,22 @@ export default function CreateProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage("");
 
     try {
-      const docRef = await addDoc(collection(db, "profiles"), formData);
-      console.log("Document written with ID:", docRef.id);
+      if (!user) {
+        throw new Error("User is not authenticated.");
+      }
 
-      setSuccessMessage("Profile created successfully!");
-      setFormData({
-        name: "",
-        email: "",
-        skills: "",
-        experience: "",
-        bio: "",
+      const docRef = await addDoc(collection(db, "profiles"), {
+        ...formData,
+        userId: user.uid,
       });
+
+      router.push(`/profile/${docRef.id}`);
     } catch (error) {
-      console.error("Error adding document:", error);
-      setSuccessMessage("Failed to create profile. Please try again.");
+      console.error("Error creating profile:", error);
+      setErrorMessage("Failed to create profile. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -152,10 +166,9 @@ export default function CreateProfile() {
             {isSubmitting ? "Submitting..." : "Create Profile"}
           </button>
         </form>
-
-        {successMessage && (
-          <div className="mt-4 text-center text-green-700 font-medium">
-            {successMessage}
+        {errorMessage && (
+          <div className="mt-4 text-center text-red-600 font-medium">
+            {errorMessage}
           </div>
         )}
       </div>
