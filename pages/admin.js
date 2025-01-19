@@ -22,9 +22,19 @@ export default function Admin() {
     { id: 7, title: "Software Engineer", status: "Inactive" },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formType, setFormType] = useState(""); // "user" or "job"
-  const [formMode, setFormMode] = useState(""); // "add" or "edit"
-  const [currentData, setCurrentData] = useState(null); // Data for editing
+  const [formType, setFormType] = useState("");
+  const [formMode, setFormMode] = useState("");
+  const [currentData, setCurrentData] = useState(null);
+
+  const handleDelete = (type, id) => {
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      if (type === "user") {
+        setUsers(users.filter((user) => user.id !== id));
+      } else if (type === "job") {
+        setJobs(jobs.filter((job) => job.id !== id));
+      }
+    }
+  };
 
   const handleAddEdit = (type, mode, data = null) => {
     setFormType(type);
@@ -132,6 +142,12 @@ export default function Admin() {
                   >
                     Edit
                   </button>
+                  <button
+                    onClick={() => handleDelete("user", user.id)}
+                    className="px-3 py-1 bg-red-500 text-white rounded"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
@@ -189,6 +205,12 @@ export default function Admin() {
                     className="px-3 py-1 bg-yellow-500 text-white rounded mr-2"
                   >
                     Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete("job", job.id)}
+                    className="px-3 py-1 bg-red-500 text-white rounded"
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
