@@ -1,4 +1,16 @@
+import { useRouter } from "next/router";
+
 export default function Candidates() {
+  const router = useRouter();
+
+  const handleProfileCreation = () => {
+    router.push("/create-profile");
+  };
+
+  const handleGetStarted = () => {
+    router.push("/signup");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-gradient-to-r from-green-600 to-green-700 text-white py-12">
@@ -8,7 +20,10 @@ export default function Candidates() {
             Unlock career opportunities with Recruit-ease and connect with top
             companies hiring now.
           </p>
-          <button className="mt-6 bg-white text-green-700 px-6 py-3 rounded shadow-md font-semibold hover:bg-green-100">
+          <button
+            className="mt-6 bg-white text-green-700 px-6 py-3 rounded shadow-md font-semibold hover:bg-green-100 focus:outline-none focus:ring focus:ring-green-300"
+            onClick={handleProfileCreation}
+          >
             Create Your Profile
           </button>
         </div>
@@ -24,33 +39,33 @@ export default function Candidates() {
             and stand out to potential employers.
           </p>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-800">
-                Personalized Job Recommendations
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Get tailored suggestions based on your skills, experience, and
-                preferences.
-              </p>
-            </div>
-            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-800">
-                Resume-Building Tools
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Craft a professional resume that highlights your strengths and
-                attracts recruiters.
-              </p>
-            </div>
-            <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-800">
-                Direct Communication
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Chat with employers directly to discuss opportunities and get
-                hired faster.
-              </p>
-            </div>
+            {[
+              {
+                title: "Personalized Job Recommendations",
+                description:
+                  "Get tailored suggestions based on your skills, experience, and preferences.",
+              },
+              {
+                title: "Resume-Building Tools",
+                description:
+                  "Craft a professional resume that highlights your strengths and attracts recruiters.",
+              },
+              {
+                title: "Direct Communication",
+                description:
+                  "Chat with employers directly to discuss opportunities and get hired faster.",
+              },
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow"
+              >
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 mt-2">{feature.description}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -62,7 +77,10 @@ export default function Candidates() {
             Join thousands of successful candidates who found their roles
             through Recruit-ease.
           </p>
-          <button className="inline-block bg-green-600 text-white px-6 py-3 rounded shadow-md font-semibold hover:bg-green-700">
+          <button
+            className="inline-block bg-green-600 text-white px-6 py-3 rounded shadow-md font-semibold hover:bg-green-700 focus:outline-none focus:ring focus:ring-green-300"
+            onClick={handleGetStarted}
+          >
             Get Started Today
           </button>
         </section>
