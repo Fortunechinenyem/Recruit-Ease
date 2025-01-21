@@ -41,13 +41,21 @@ export default function Dashboard() {
               href="/create-profile"
               className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center hover:shadow-xl transition-shadow"
             >
-              <Image
-                src="/images/profile-icon.png"
-                width={50}
-                height={50}
-                alt="Profile"
-                className="w-16 h-16 mb-4"
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 10.5c0 1.794-1.456 3.25-3.25 3.25s-3.25-1.456-3.25-3.25 1.456-3.25 3.25-3.25 3.25 1.456 3.25 3.25zM12 14.75c-2.071 0-6.25 1.062-6.25 3.25V19c0 .69.56 1.25 1.25 1.25h10c.69 0 1.25-.56 1.25-1.25v-1c0-2.188-4.179-3.25-6.25-3.25z"
+                />
+              </svg>
+
               <p className="text-lg font-semibold text-gray-800">
                 Create Profile
               </p>
@@ -56,39 +64,61 @@ export default function Dashboard() {
               href="/jobs"
               className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center hover:shadow-xl transition-shadow"
             >
-              <Image
-                src="/images/jobs-icon.png"
-                width={50}
-                height={50}
-                alt="Jobs"
-                className="w-16 h-16 mb-4"
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3.75 7.5h16.5M3.75 7.5l1.5 10.5c.162 1.143 1.08 2 2.25 2h9c1.17 0 2.088-.857 2.25-2l1.5-10.5M3.75 7.5h16.5M7.5 4.5h9M7.5 4.5a2.25 2.25 0 114.5 0m4.5 0h-9"
+                />
+              </svg>
               <p className="text-lg font-semibold text-gray-800">View Jobs</p>
             </Link>
             <Link
               href="/jobs/saved"
               className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center hover:shadow-xl transition-shadow"
             >
-              <Image
-                src="/images/saved-icon.png"
-                width={50}
-                height={50}
-                alt="Saved Jobs"
-                className="w-16 h-16 mb-4"
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M5.25 7.5v13.125c0 .469.392.875.875.875.19 0 .38-.062.53-.18L12 17.625l5.345 3.696c.15.118.34.18.53.18.483 0 .875-.406.875-.875V7.5M5.25 7.5h13.5M5.25 7.5l1.5-4.5h10.5l1.5 4.5"
+                />
+              </svg>
               <p className="text-lg font-semibold text-gray-800">Saved Jobs</p>
             </Link>
             <Link
               href="/settings"
               className="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center hover:shadow-xl transition-shadow"
             >
-              <Image
-                src="/images/settings-icon.png"
-                width={50}
-                height={50}
-                alt="Settings"
-                className="w-16 h-16 mb-4"
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 15.75A3.75 3.75 0 1012 8.25a3.75 3.75 0 000 7.5zM19.812 15.04a9.033 9.033 0 00.423-2.54 9.03 9.03 0 00-.423-2.54m-15.624 5.08a9.033 9.033 0 01-.423-2.54c0-.893.148-1.755.423-2.54m13.202 8.307a9.032 9.032 0 01-4.39 1.166 9.032 9.032 0 01-4.39-1.166m8.78-13.554a9.032 9.032 0 00-4.39-1.166 9.032 9.032 0 00-4.39 1.166"
+                />
+              </svg>
+
               <p className="text-lg font-semibold text-gray-800">Settings</p>
             </Link>
           </div>
