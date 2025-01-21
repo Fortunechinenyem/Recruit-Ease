@@ -9,29 +9,33 @@ export default function ProfilePage() {
 
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (id) {
-      const fetchProfile = async () => {
-        try {
-          const docRef = doc(db, "profiles", id);
-          const docSnap = await getDoc(docRef);
+    if (!id) return;
 
-          if (docSnap.exists()) {
-            setProfile(docSnap.data());
-          } else {
-            console.log("No such document!");
-          }
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-        } finally {
-          setLoading(false);
+    const fetchProfile = async () => {
+      try {
+        const docRef = doc(db, "profiles", id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setProfile(docSnap.data());
+        } else {
+          setError("Profile not found");
         }
-      };
+      } catch (err) {
+        console.error("Error fetching profile:", err.message);
+        setError("Error fetching profile. Check the console for details.");
+      }
+    };
 
-      fetchProfile();
-    }
+    fetchProfile();
   }, [id]);
+
+  if (error) {
+    return <div className="text-center text-red-600">{error}</div>;
+  }
 
   if (loading) {
     return (

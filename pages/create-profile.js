@@ -3,11 +3,9 @@ import { useRouter } from "next/router";
 import { collection, addDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function CreateProfile() {
   const [user, setUser] = useState(null);
-  const [resume, setResume] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -39,9 +37,6 @@ export default function CreateProfile() {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setResume(e.target.files[0]);
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -52,24 +47,17 @@ export default function CreateProfile() {
         throw new Error("User is not authenticated.");
       }
 
-      let resumeURL = "";
-      if (resume) {
-        const storage = getStorage();
-        const resumeRef = ref(storage, `resumes/${user?.uid}-${resume.name}`); // Use optional chaining to prevent crashes
-        await uploadBytes(resumeRef, resume);
-        resumeURL = await getDownloadURL(resumeRef);
-      }
-
-      const docRef = await addDoc(collection(db, "profiles"), {
+      await addDoc(collection(db, "profiles"), {
         ...formData,
         userId: user.uid,
-        resumeURL,
       });
 
-      router.push(`/profile/${docRef.id}`);
+      router.push("/profile/success");
     } catch (error) {
-      console.error("Error creating profile:", error);
-      setErrorMessage("Failed to create profile. Please try again.");
+      console.error("Error details:", error.message);
+      setErrorMessage(
+        "Failed to create profile. Check the console for details."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -171,21 +159,6 @@ export default function CreateProfile() {
               placeholder="Tell us about yourself"
               rows="4"
               required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="resume"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Upload Resume/CV
-            </label>
-            <input
-              type="file"
-              id="resume"
-              accept=".pdf,.doc,.docx"
-              onChange={handleFileChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
