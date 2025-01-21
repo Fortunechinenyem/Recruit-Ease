@@ -21,6 +21,7 @@ export default function CreateProfile() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("Current user:", currentUser);
       if (currentUser) {
         setUser(currentUser);
       } else {
@@ -41,7 +42,6 @@ export default function CreateProfile() {
   const handleFileChange = (e) => {
     setResume(e.target.files[0]);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -55,7 +55,7 @@ export default function CreateProfile() {
       let resumeURL = "";
       if (resume) {
         const storage = getStorage();
-        const resumeRef = ref(storage, `resumes/${user.uid}-${resume.name}`);
+        const resumeRef = ref(storage, `resumes/${user?.uid}-${resume.name}`); // Use optional chaining to prevent crashes
         await uploadBytes(resumeRef, resume);
         resumeURL = await getDownloadURL(resumeRef);
       }

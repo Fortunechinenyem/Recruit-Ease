@@ -1,16 +1,18 @@
 import Analytics from "@/app/components/Analytics";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Admin() {
-  const [users, setUsers] = useState([
-    { id: 1, name: "John Doe", role: "Job Seeker" },
-    { id: 2, name: "Jane Smith", role: "Recruiter" },
-    { id: 3, name: "Alice Johnson", role: "Job Seeker" },
-    { id: 4, name: "Bob Brown", role: "Recruiter" },
-    { id: 5, name: "Charlie White", role: "Job Seeker" },
-    { id: 6, name: "Diana Prince", role: "Recruiter" },
-    { id: 7, name: "Eve Black", role: "Job Seeker" },
-  ]);
+  const [users, setUsers] = useState([]);
 
   const [jobs, setJobs] = useState([
     { id: 1, title: "Frontend Developer", status: "Active" },
@@ -26,13 +28,14 @@ export default function Admin() {
   const [formMode, setFormMode] = useState("");
   const [currentData, setCurrentData] = useState(null);
 
-  const handleDelete = (type, id) => {
-    if (window.confirm("Are you sure you want to delete this item?")) {
-      if (type === "user") {
-        setUsers(users.filter((user) => user.id !== id));
-      } else if (type === "job") {
-        setJobs(jobs.filter((job) => job.id !== id));
-      }
+  const handleDelete = async (type, id) => {
+    if (
+      type === "user" &&
+      window.confirm("Are you sure you want to delete this user?")
+    ) {
+      const userDoc = doc(db, "users", id);
+      await deleteDoc(userDoc);
+      setUsers(users.filter((user) => user.id !== id));
     }
   };
 
@@ -43,24 +46,18 @@ export default function Admin() {
     setIsModalOpen(true);
   };
 
-  const handleSave = (formData) => {
+  const handleSave = async (formData) => {
     if (formType === "user") {
+      const usersCollection = collection(db, "users");
       if (formMode === "add") {
-        setUsers([...users, { id: users.length + 1, ...formData }]);
+        const docRef = await addDoc(usersCollection, formData);
+        setUsers([...users, { id: docRef.id, ...formData }]);
       } else if (formMode === "edit") {
+        const userDoc = doc(db, "users", currentData.id);
+        await updateDoc(userDoc, formData);
         setUsers(
           users.map((user) =>
-            user.id === formData.id ? { ...user, ...formData } : user
-          )
-        );
-      }
-    } else if (formType === "job") {
-      if (formMode === "add") {
-        setJobs([...jobs, { id: jobs.length + 1, ...formData }]);
-      } else if (formMode === "edit") {
-        setJobs(
-          jobs.map((job) =>
-            job.id === formData.id ? { ...job, ...formData } : job
+            user.id === currentData.id ? { ...user, ...formData } : user
           )
         );
       }
@@ -107,6 +104,19 @@ export default function Admin() {
       }
     }
   };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const usersCollection = collection(db, "users");
+      const userSnapshot = await getDocs(usersCollection);
+      const userList = userSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(userList);
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -185,12 +195,10 @@ export default function Admin() {
         <table className="w-full border-collapse border bg-white shadow-lg">
           <thead className="bg-indigo-600 text-white">
             <tr>
-              <tr>
-                <th className="border px-4 py-2">ID</th>
-                <th className="border px-4 py-2">Title</th>
-                <th className="border px-4 py-2">Status</th>
-                <th className="border px-4 py-2">Actions</th>
-              </tr>
+              <th className="border px-4 py-2">ID</th>
+              <th className="border px-4 py-2">Title</th>
+              <th className="border px-4 py-2">Status</th>
+              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
