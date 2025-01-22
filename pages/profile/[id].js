@@ -15,6 +15,7 @@ export default function ProfilePage() {
     if (!id) return;
 
     const fetchProfile = async () => {
+      setLoading(true); // Start loading
       try {
         const docRef = doc(db, "profiles", id);
         const docSnap = await getDoc(docRef);
@@ -27,15 +28,13 @@ export default function ProfilePage() {
       } catch (err) {
         console.error("Error fetching profile:", err.message);
         setError("Error fetching profile. Check the console for details.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProfile();
   }, [id]);
-
-  if (error) {
-    return <div className="text-center text-red-600">{error}</div>;
-  }
 
   if (loading) {
     return (
@@ -43,6 +42,13 @@ export default function ProfilePage() {
         <p className="text-gray-600 text-lg">Loading...</p>
       </div>
     );
+  }
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-600">{error}</div>;
   }
 
   if (!profile) {

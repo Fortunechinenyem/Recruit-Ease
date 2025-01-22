@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -47,7 +47,8 @@ export default function CreateProfile() {
         throw new Error("User is not authenticated.");
       }
 
-      await addDoc(collection(db, "profiles"), {
+      // Use user.uid as the document ID
+      await setDoc(doc(db, "profiles", user.uid), {
         ...formData,
         userId: user.uid,
       });
