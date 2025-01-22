@@ -47,13 +47,12 @@ export default function CreateProfile() {
         throw new Error("User is not authenticated.");
       }
 
-      // Use user.uid as the document ID
       await setDoc(doc(db, "profiles", user.uid), {
         ...formData,
         userId: user.uid,
       });
 
-      router.push("/profile/success");
+      router.push(`/profile/${user.uid}`);
     } catch (error) {
       console.error("Error details:", error.message);
       setErrorMessage(
