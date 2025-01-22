@@ -49,20 +49,55 @@ export default function ProfilePage() {
   }, [id]);
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center text-red-500">
+          <p className="text-lg font-semibold">{error}</p>
+        </div>
+      </div>
+    );
   }
 
   if (!profile) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center text-gray-500">
+          <p className="text-lg font-semibold">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>{profile.name}</h1>
-      <p>Email: {profile.email}</p>
-      <p>Skills: {profile.skills}</p>
-      <p>Experience: {profile.experience} years</p>
-      <p>Bio: {profile.bio}</p>
+    <div className="min-h-screen bg-gray-100 py-8 px-4">
+      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="bg-blue-600 h-40"></div>
+        <div className="relative -mt-20 flex justify-center">
+          <img
+            src="https://via.placeholder.com/150"
+            alt={profile.name}
+            className="w-36 h-36 rounded-full border-4 border-white object-cover"
+          />
+        </div>
+        <div className="px-6 py-4 text-center">
+          <h1 className="text-2xl font-bold text-gray-800">{profile.name}</h1>
+          <p className="text-gray-600">{profile.email}</p>
+        </div>
+        <div className="px-6 py-4">
+          <h2 className="text-lg font-semibold text-gray-700">Skills</h2>
+          <p className="text-gray-600">{profile.skills || "Not provided"}</p>
+          <h2 className="text-lg font-semibold text-gray-700 mt-4">
+            Experience
+          </h2>
+          <p className="text-gray-600">
+            {profile.experience
+              ? `${profile.experience} years`
+              : "Not provided"}
+          </p>
+          <h2 className="text-lg font-semibold text-gray-700 mt-4">Bio</h2>
+          <p className="text-gray-600">{profile.bio || "Not provided"}</p>
+        </div>
+      </div>
     </div>
   );
 }
