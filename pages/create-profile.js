@@ -23,6 +23,7 @@ export default function CreateProfile() {
       if (currentUser) {
         setUser(currentUser);
       } else {
+        console.warn("User not authenticated. Redirecting to login.");
         router.push("/login");
       }
     });
